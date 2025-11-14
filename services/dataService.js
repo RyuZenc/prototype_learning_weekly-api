@@ -82,6 +82,9 @@ async function loadData() {
     db.completions = completions;
     db.examResults = examResults;
 
+    // DEBUG: Cek user pertama (sekarang harusnya sudah benar)
+    console.log('DEBUG: User pertama di DB:', db.users[0]);
+
     console.log('🎉 Semua data CSV berhasil dimuat ke memori.');
   } catch (error)
  {
@@ -89,7 +92,7 @@ async function loadData() {
     process.exit(1); 
   }
 }
-// Muat data segera setelah modul ini diimpor
+
 module.exports = {
   db,
   loadData
