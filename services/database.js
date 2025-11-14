@@ -51,17 +51,6 @@ db.serialize(() => {
     if (err) console.error("Error buat tabel schedules:", err.message);
     else console.log("Tabel 'schedules' siap.");
   });
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS learning_targets (
-      user_id TEXT PRIMARY KEY,
-      target_type TEXT DEFAULT 'modules',
-      target_value INTEGER DEFAULT 7
-    )
-  `, (err) => {
-    if (err) console.error("Error buat tabel learning_targets:", err.message);
-    else console.log("Tabel 'learning_targets' siap.");
-  });
 });
 
 // Ekspor koneksi 'db' agar bisa dipakai di controller
