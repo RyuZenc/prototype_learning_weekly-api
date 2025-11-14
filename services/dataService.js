@@ -20,10 +20,29 @@ function loadCsv(filename) {
 
     fs.createReadStream(filePath)
       .pipe(csv({
-        // --- [FIX BARU DI SINI] ---
-        bom: true, // 1. Otomatis deteksi dan hapus BOM dari Excel
-        mapHeaders: ({ header }) => header.trim(), // 2. Tetap bersihkan header
-        mapValues: ({ value }) => value.trim() // 3. Bersihkan semua nilai data (hapus spasi)
+        separator: ';', // SUDAH BENAR
+        bom: true,      // SUDAH BENAR
+        mapHeaders: ({ header }) => header.trim(), // SUDAH BENAR
+        
+        // --- [INI PERBAIKAN FINALNYA] ---
+        mapValues: ({ header, value }) => {
+          const trimmedValue = value.trim();
+          
+          // Daftar semua kolom ID yang mungkin diformat Excel sebagai "96.989"
+          const idHeaders = [
+            'id', 'user_id', 'journey_id', 'tutorial_id', 
+            'developer_id', 'submitter_id', 'quiz_id', 'version_id',
+            'reviewer_id', 'current_reviewer', 'exam_module_id',
+            'examinees_id', 'exam_registration_id', 'platform_id',
+            'instructor_id', 'installment_plan_id', 'city_id'
+          ];
+
+          if (idHeaders.includes(header)) {
+            // Hapus semua titik dari string. "96.989" -> "96989"
+            return trimmedValue.replace(/\./g, '');
+          }
+          return trimmedValue; // Kembalikan nilai lain (seperti email, path) apa adanya
+        }
       }))
       .on('data', (data) => results.push(data))
       .on('end', () => {
@@ -34,7 +53,6 @@ function loadCsv(filename) {
   });
 }
 
-// Fungsi utama untuk memuat semua data
 async function loadData() {
   console.log('Memulai memuat data dari CSV...');
   try {
@@ -65,7 +83,8 @@ async function loadData() {
     db.examResults = examResults;
 
     console.log('🎉 Semua data CSV berhasil dimuat ke memori.');
-  } catch (error) {
+  } catch (error)
+ {
     console.error('❌ Gagal memuat data CSV:', error);
     process.exit(1); 
   }

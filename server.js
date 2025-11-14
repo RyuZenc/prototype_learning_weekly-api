@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const { loadData } = require('./services/dataService');
+const db = require('./services/database.js');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
