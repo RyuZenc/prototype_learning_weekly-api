@@ -20,4 +20,8 @@ router.post('/user/:userId/check-ins', userController.addCheckIn);
 router.get('/user/:userId/schedule', userController.getSchedule);
 router.post('/user/:userId/schedule', userController.setSchedule);
 
+// GET & POST Learning Target
+router.get('/user/:userId/target', userController.getTarget);
+router.post('/user/:userId/target', userController.setTarget);
+
 module.exports = router;
