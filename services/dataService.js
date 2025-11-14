@@ -89,7 +89,7 @@ async function loadData() {
     process.exit(1); 
   }
 }
-
+// Muat data segera setelah modul ini diimpor
 module.exports = {
   db,
   loadData
