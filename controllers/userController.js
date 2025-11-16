@@ -79,6 +79,42 @@ exports.getStreak = (req, res) => {
   res.json(streakData);
 };
 
+exports.getProgress = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // 1. Cek user (mengikuti pola yang baik dari getStreak)
+    const user = db.users.find((u) => u.id && u.id == userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User tidak ditemukan' });
+    }
+
+    // 2. Ambil data tracking dari 'db' object (INI PERBAIKAN UTAMANYA)
+    // Kita tidak memanggil loadData(), tapi langsung membaca dari 'db'
+    const allTrackings = db.trackings; 
+
+    // 3. Filter berdasarkan user
+    const userTrackings = allTrackings.filter(t => t.developer_id && t.developer_id == userId);
+
+    // 4. Hitung modul yang selesai (yang memiliki 'completed_at')
+    const completedModules = userTrackings.filter(t => t.completed_at && t.completed_at.trim() !== '').length;
+    
+    // 5. Logika 'coursesInProgress' (sesuai contoh di instruksi FE)
+    const coursesInProgress = 3; // Angka statis dari instruksi
+
+    // 6. Kirim data sebagai JSON
+    res.json({
+      completedModules: completedModules,
+      coursesInProgress: coursesInProgress
+    });
+
+  } catch (error) {
+    // Jika ada error lain, ini akan menangkapnya
+    console.error('Error di dalam getProgress:', error);
+    res.status(500).json({ message: 'Error calculating progress', error: error.message });
+  }
+};
+
 // GET /api/user/:userId/activity
 exports.getActivity = (req, res) => {
   const { userId } = req.params;

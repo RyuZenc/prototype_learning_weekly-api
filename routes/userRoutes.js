@@ -1,4 +1,3 @@
-// routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
@@ -8,6 +7,9 @@ const userController = require('../controllers/userController');
 
 // GET Streak Card
 router.get('/user/:userId/streak', userController.getStreak);
+
+// GET Progress Card
+router.get('/user/:userId/progress', userController.getProgress);
 
 // GET Activity Card
 router.get('/user/:userId/activity', userController.getActivity);
